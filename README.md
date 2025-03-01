@@ -35,8 +35,8 @@ ActionAI 是一个强大的大语言模型交互框架，支持多种模型、�
 
 | 操作系统 | 下载链接 |
 |---------|---------|
-| Windows | [ActionAI-Setup.exe](https://github.com/sylearn/ActionAI/releases/latest/download/ActionAI-Setup.exe) |
-| macOS | [ActionAI.pkg](https://github.com/sylearn/ActionAI/releases/latest/download/ActionAI.pkg) |
+| Windows | [ActionAI](https://github.com/sylearn/ActionAI/releases) |
+| macOS | [ActionAI](https://github.com/sylearn/ActionAI/releases) |
 
 安装完成后，直接从应用列表启动ActionAI即可开始使用。
 
