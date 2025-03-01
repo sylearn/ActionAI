@@ -40,6 +40,19 @@ ActionAI 是一个强大的大语言模型交互框架，支持多种模型、�
 
 安装完成后，直接从应用列表启动ActionAI即可开始使用。
 
+<details>
+<summary>Mac 用户额外步骤</summary>
+打开终端，进入应用所在目录
+执行以下命令使文件可执行：
+
+```shell
+chmod +x ./ActionAI
+```
+
+如果遇到以下提示，[点击这里](https://sysin.org/blog/macos-if-crashes-when-opening/)查看解决方法
+
+</details>
+
 ### 方法二：源码安装
 
 如果您希望自定义安装或参与开发，可以通过源码安装：
