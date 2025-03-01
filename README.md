@@ -49,7 +49,7 @@ ActionAI 是一个强大的大语言模型交互框架，支持多种模型、�
 chmod +x ./ActionAI
 ```
 
-如果遇到以下提示，[点击这里](https://sysin.org/blog/macos-if-crashes-when-opening/)查看解决方法
+如果遇到无法打开提示，[点击这里](https://sysin.org/blog/macos-if-crashes-when-opening/)查看解决方法
 
 </details>
 
