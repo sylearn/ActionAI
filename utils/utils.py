@@ -241,8 +241,13 @@ def get_token_count(message: List[Dict[str, Any]], model: str) -> tuple[int, int
         - total_output_tokens: 所有轮次的输出token总和
         - current_input_tokens: 如果开始新的对话轮次，当前所有消息将产生的输入token数
     """
-    model="gpt-4o"
-    encoding = tiktoken.encoding_for_model(model)
+    # 尝试导入tiktoken扩展模块，解决打包后找不到编码的问题
+    import tiktoken_ext
+    import tiktoken_ext.openai_public
+        
+    # 始终使用cl100k_base编码，不使用model参数
+    encoding = tiktoken.get_encoding("cl100k_base")
+    
     total_input_tokens = 0
     total_output_tokens = 0
     current_input_tokens = 0
@@ -251,11 +256,12 @@ def get_token_count(message: List[Dict[str, Any]], model: str) -> tuple[int, int
     user_indices = [i for i, msg in enumerate(message) if msg["role"] == "user"]
     # 计算已经对话的轮次
     round_count = len(user_indices)
+    
     for round_idx, user_idx in enumerate(user_indices):
         # 计算当前轮次的范围
         round_start = user_idx
         round_end = user_indices[round_idx + 1] if round_idx + 1 < len(user_indices) else len(message)
-    
+
         # 将user之前的所有消息计入input tokens
         for msg in message[:round_start]:
             tokens = encoding.encode(msg["content"])
@@ -263,11 +269,11 @@ def get_token_count(message: List[Dict[str, Any]], model: str) -> tuple[int, int
             if msg["role"] == "assistant" and "function_call" in msg:
                 function_tokens = encoding.encode(json.dumps(msg["function_call"]))
                 total_input_tokens += len(function_tokens)
-        
+    
         # 当前轮次的user消息计入input tokens
         user_tokens = encoding.encode(message[user_idx]["content"])
         total_input_tokens += len(user_tokens)
-        
+    
         # 当前轮次user之后的assistant消息计入output tokens
         for msg in message[round_start + 1:round_end]:
             if msg["role"] == "assistant":
@@ -277,7 +283,7 @@ def get_token_count(message: List[Dict[str, Any]], model: str) -> tuple[int, int
                 if "function_call" in msg:
                     function_tokens = encoding.encode(json.dumps(msg["function_call"]))
                     total_output_tokens += len(function_tokens)
-    
+
     # 计算current_input_tokens（所有当前消息的token数）
     for msg in message:
         tokens = encoding.encode(msg["content"])
@@ -285,7 +291,7 @@ def get_token_count(message: List[Dict[str, Any]], model: str) -> tuple[int, int
         if msg["role"] == "assistant" and "function_call" in msg:
             function_tokens = encoding.encode(json.dumps(msg["function_call"]))
             current_input_tokens += len(function_tokens)
-    
+
     return total_input_tokens, total_output_tokens, current_input_tokens, round_count
 
 if __name__ == "__main__":

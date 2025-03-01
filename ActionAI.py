@@ -49,27 +49,40 @@ def preload_encodings():
     """
     try:
         # 预加载常用编码
+        logging.info("开始预加载tiktoken编码...")
+        # 预先导入tiktoken扩展模块，解决打包后找不到编码的问题
+        import tiktoken_ext
+        import tiktoken_ext.openai_public
+        # 尝试加载编码
         tiktoken.get_encoding("cl100k_base")
-        tiktoken.get_encoding("p50k_base")
+        logging.info("成功加载cl100k_base编码")
         
         # 为所有模型注册相同的编码
         # 从环境变量获取模型列表
         model_list_str = os.getenv("MODEL", "")
+        logging.info(f"环境变量MODEL值: {model_list_str}")
         if model_list_str:
             # 分割模型列表
             model_list = [model.strip() for model in model_list_str.split(";") if model.strip()]
+            logging.info(f"解析出的模型列表: {model_list}")
             # 为每个模型注册相同的编码
             for model in model_list:
                 if model:
-                    tiktoken.model.MODEL_TO_ENCODING[model] = "cl100k_base"
+                    try:
+                        logging.info(f"正在为模型 {model} 注册cl100k_base编码")
+                        tiktoken.model.MODEL_TO_ENCODING[model] = "cl100k_base"
+                        logging.info(f"模型 {model} 注册成功")
+                    except Exception as inner_e:
+                        logging.error(f"为模型 {model} 注册编码时出错: {inner_e}")  
+                        import traceback
+                        logging.error(traceback.format_exc())
     except Exception as e:
-        print(f"预加载 tiktoken 编码失败: {e}")
+        logging.error(f"预加载 tiktoken 编码失败: {e}")
+        import traceback
+        logging.error(traceback.format_exc())
 
 # 初始化基础路径
 base_path = setup_base_paths()
-
-# 预加载编码
-preload_encodings()
 
 from utils.utils import parse_mcp_servers, get_all_server_names, get_server_command, get_server_args, get_server_env
 from utils.utils import get_token_count
@@ -77,6 +90,9 @@ from utils.utils import load_env_files
 
 # 加载环境变量
 load_env_files(seconds=1)
+
+# 预加载编码 - 移到加载环境变量之后
+preload_encodings()
 
 def setup_logging():
     """
@@ -87,7 +103,7 @@ def setup_logging():
     # 配置日志级别
     # 配置日志记录器
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.DEBUG if os.getenv("DEBUG", "False").lower() == "true" else logging.ERROR)
 
     # 配置统一的日志格式
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')

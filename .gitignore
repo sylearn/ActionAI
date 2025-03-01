@@ -49,3 +49,7 @@
 #项目
 mcp_*.json
 Server/
+releases/
+**.spec
+build_release.*
+build.py
