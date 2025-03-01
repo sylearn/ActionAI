@@ -12,7 +12,7 @@
 
 ## 📖 简介
 
-ActionAI 是一个强大的大语言模型交互框架，支持多种模型、和 MCP 协议，提供流畅的交互式聊天体验。通过终端界面，您可以与AI进行自然对话，并通过强大丰富MCP服务端，让AI具备文件读写、网络访问、代码执行等能力。
+ActionAI 是一个基于语言大模型的命令行交互框架，支持多种模型切换、MCP协议，提供流畅的交互式聊天体验。通过终端界面，您可以与AI进行自然对话，并通过强大丰富MCP服务端，让AI具备文件读写、网络访问、代码执行等能力。
 
 **🔥 自动化能力：** 只需简单配置MCP协议，ActionAI即可赋予AI强大的系统操作能力，包括文件管理、应用控制、文档编辑等。AI可以在几乎不需要人类干预的情况下，自动完成复杂任务流程，大幅提升工作效率。
 
@@ -136,7 +136,13 @@ ActionAI: 任务已完成！销售报告已生成并发送至团队所有成员�
 
 ## 🔌 MCP 服务器配置
 
-MCP（Model Context Protocol）是ActionAI的核心功能，通过简单配置，即可赋予AI强大的系统操作能力。
+MCP（Model Context Protocol）是ActionAI的核心功能，它通过简单的配置即可让AI获得强大的系统操作能力。
+
+以下资源提供了丰富的MCP工具和服务器:
+
+- [OpenTools](https://opentools.com/) - 提供丰富的AI应用工具库和MCP服务器
+- [Glamama](https://glama.ai/mcp/servers) - 提供多种开源MCP服务器实现
+
 
 ### 配置示例
 
@@ -145,19 +151,12 @@ MCP（Model Context Protocol）是ActionAI的核心功能，通过简单配置�
   "mcpServers": {
     "filesystem": {
       "command": "npx",
-      "args": ["@modelcontextprotocol/mcp-fs-server"]
-    },
-    "browser": {
-      "command": "npx",
-      "args": ["@modelcontextprotocol/mcp-browser-server"]
-    },
-    "github": {
-      "command": "npx",
-      "args": ["@modelcontextprotocol/mcp-github-server"]
-    },
-    "terminal": {
-      "command": "npx",
-      "args": ["@modelcontextprotocol/mcp-terminal-server"]
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/username/Desktop",
+        "/path/to/other/allowed/dir"
+      ]
     },
     "custom_tool": {
       "command": "python",
@@ -167,39 +166,11 @@ MCP（Model Context Protocol）是ActionAI的核心功能，通过简单配置�
 }
 ```
 
-### 常用MCP服务
+您也可以轻松创建自己的MCP服务，扩展AI的能力。
 
-| MCP服务 | 功能描述 | 安装命令 |
-|---------|---------|---------|
-| filesystem | 文件读写、目录管理 | `npm install -g @modelcontextprotocol/mcp-fs-server` |
-| browser | 网页浏览、信息检索 | `npm install -g @modelcontextprotocol/mcp-browser-server` |
-| terminal | 执行系统命令 | `npm install -g @modelcontextprotocol/mcp-terminal-server` |
-| github | GitHub仓库操作 | `npm install -g @modelcontextprotocol/mcp-github-server` |
-| vscode | 代码编辑与管理 | `npm install -g @modelcontextprotocol/mcp-vscode-server` |
-
-### 自定义MCP服务
-
-您可以轻松创建自己的MCP服务，扩展AI的能力：
-
-```python
-# 示例：自定义数据库操作MCP服务
-from mcp_server_sdk import MCPServer
-
-server = MCPServer("database_server")
-
-@server.register_tool
-def query_database(sql_query, database_name):
-    # 实现数据库查询逻辑
-    return results
-
-@server.register_tool
-def update_database(sql_query, database_name):
-    # 实现数据库更新逻辑
-    return success_status
-
-server.start()
-```
 
 ## 📝 许可证
 
 [MIT License](https://opensource.org/licenses/MIT)
+
+
