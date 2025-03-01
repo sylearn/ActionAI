@@ -1,0 +1,51 @@
+# Python
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+**/*.so
+**/.Python
+**/build/
+**/develop-eggs/
+**/dist/
+**/downloads/
+**/eggs/
+**/.eggs/
+**/lib/
+**/lib64/
+**/parts/
+**/sdist/
+**/var/
+**/wheels/
+**/*.egg-info/
+**/.installed.cfg
+**/*.egg
+**/test/
+# 虚拟环境
+**/venv/
+**/env/
+**/ENV/
+
+# IDE 相关
+.idea/
+.vscode/
+**/*.swp
+**/*.swo
+.project
+.pydevproject
+
+# 环境变量文件
+**/.env_mac
+**/.env_win
+**/.env
+
+# 操作系统
+**/.DS_Store
+**/Thumbs.db
+**/*.log
+**/*.tmp
+# Jupyter Notebook
+**/.ipynb_checkpoints 
+
+#项目
+mcp_*.json
+Server/
