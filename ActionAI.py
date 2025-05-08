@@ -224,8 +224,9 @@ class LLM_Client:
         """判断模型是否支持工具调用"""
         if self.model in ['deepseek-r1']:
             self.config.is_function_calling = False
-        else:
-            self.config.is_function_calling = True
+        # 以下需要注释掉，否则环境变量IS_FUNCTION_CALLING设置为False时，也会强制设置为True
+        #else:
+        #    self.config.is_function_calling = True 
             
     def choose_model(self):
         """选择要使用的AI模型"""
