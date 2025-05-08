@@ -4,4 +4,4 @@ openai
 mcp
 tiktoken
 asyncio
-
+prompt_toolkit

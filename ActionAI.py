@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import tiktoken
+import readline  # 添加readline导入
 from contextlib import AsyncExitStack
 from typing import List
 
@@ -1172,10 +1173,28 @@ class LLM_Client:
         Returns:
             str: 用户输入的文本
         """
+        # 初始化readline
+        try:
+            # 定义一个空的补全函数
+            def empty_completer(text, state):
+                return None
+                
+            # 完全禁用readline的补全功能
+            readline.set_completer(empty_completer)
+            readline.parse_and_bind('bind ^I rl_complete')  # 禁用tab补全
+            readline.parse_and_bind('set disable-completion on')  # 禁用所有补全
+            readline.parse_and_bind('set show-all-if-ambiguous off')  # 禁用模糊匹配显示
+            readline.parse_and_bind('set show-all-if-unmodified off')  # 禁用未修改时的显示
+            readline.parse_and_bind('set completion-ignore-case off')  # 禁用大小写忽略
+            readline.parse_and_bind('set completion-query-items 0')  # 禁用补全项查询
+        except Exception as e:
+            logging.warning(f"readline初始化失败: {e}")
+            
         self._console.print(self.input_prompt, end="")
         lines = []
         while True:
             try:
+                # 使用readline获取输入
                 line = input().strip()
                 # 处理命令（以\开头）
                 if line.startswith('\\'):
